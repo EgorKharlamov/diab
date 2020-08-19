@@ -1,0 +1,6 @@
+type Mutation {
+    createUser(login: String!, pass: String!, email: String!): String!
+    authUser(login: String!, pass: String!): String!
+    invalidateTokens: Boolean!
+    createMailTokens: String!
+}

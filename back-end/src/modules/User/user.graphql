@@ -1,0 +1,27 @@
+type Query {
+    hello: String!
+    me: User!
+    users: [String]!
+}
+
+type User {
+    id: ID!
+    login: UserAuth!
+}
+
+type UserAuth {
+    login: String!
+    pass: String!
+    email: Email!
+    phone: String
+}
+
+type Email {
+    value: String!
+    verified: Boolean
+}
+
+type Phone {
+    value: String
+    verified: Boolean
+}

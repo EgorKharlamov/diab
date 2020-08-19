@@ -1,0 +1,83 @@
+version: '2.3'
+services:
+  front-end:
+    build: front-end/
+    environment:
+      FRONT_PORT: ${FRONT_PORT}
+      API_URL: ${API_URL}
+    ports:
+      - ${FRONT_PORT}:${FRONT_PORT}
+    volumes:
+      - ./front-end/src:/usr/front-end/src
+      - ./front-end/public:/usr/front-end/public
+      # - ./front-end/node_modules:/usr/front-end/node_modules
+    links:
+      - back-end
+    command: npm run dev
+    tty: true
+    networks:
+      back:
+        ipv4_address: ${FRONT_ADDR}
+        ipv6_address: 2001:3984:3989::4
+      default:
+
+  back-end:
+    build: back-end/
+    environment:
+      API_URL: ${API_URL}
+      SERVER_PORT: ${SERVER_PORT}
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ./back-end/src:/usr/back-end/src
+      # - ./back-end/node_modules:/usr/back-end/node_modules
+    command: npm run dev
+    networks:
+      back:
+        ipv4_address: ${API_ADDR}
+        ipv6_address: 2001:3984:3989::3 
+  
+  mongodb:
+    image: mongo
+    # restart: always
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+    volumes:
+      - db:/data/db
+    networks:
+      back:
+        ipv4_address: ${DB_ADDR}
+        ipv6_address: 2001:3984:3989::5
+      db:
+        ipv4_address: 192.168.2.5
+        ipv6_address: 2001:3984:3988::6
+
+volumes:
+  db:
+
+networks:
+#Internal-only network for proper nginx proxying and ssh
+  back:
+    driver: bridge
+    enable_ipv6: true
+    internal: true
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.16.238.0/24
+       - subnet: 2001:3984:3989::/64 
+  db:
+    driver: bridge
+    internal: true
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+        - subnet: 2001:3984:3988::/64 
+#External network actually
+  default:
+    driver: bridge

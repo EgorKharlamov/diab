@@ -1,0 +1,3 @@
+extend type Mutation {
+    addDairySheet(date: String!, time: String!, pressureUp: Int!, pressureDown: Int!, glucose: Float!, weight: Float!): String!
+}

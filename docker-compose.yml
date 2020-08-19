@@ -1,0 +1,55 @@
+version: '2.3'
+services:
+  # front-end:
+  #   build: front-end/
+  #   environment:
+  #     FRONT_PORT: ${FRONT_PORT}
+  #     API_URL: ${API_URL}
+  #   ports:
+  #     - ${FRONT_PORT}:9000
+  #   command: node server.js
+  #   networks:
+  #     back:
+  #       ipv4_address: ${FRONT_ADDR}
+  #     default:
+
+  # back-end:
+  #   build: back-end/
+  #   environment:
+  #     API_URL: ${API_URL}
+  #     SERVER_PORT: ${SERVER_PORT}
+  #   ports:
+  #     - ${SERVER_PORT}:${SERVER_PORT}
+  #   networks:
+  #     back:
+  #       ipv4_address: ${API_ADDR}
+  
+  mongodb:
+    image: mongo
+    # restart: always
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+    volumes:
+      - db:/data/db
+    # networks:
+    #   back:
+    #     ipv4_address: ${DB_ADDR}
+
+volumes:
+  db:
+
+# networks:
+# #Internal-only network for proper nginx proxying and ssh
+#   back:
+#     driver: bridge
+#     internal: true
+#     ipam:
+#      driver: default
+#      config:
+#        - subnet: 172.16.238.0/24
+# #External network actually
+#   default:
+#     driver: bridge
