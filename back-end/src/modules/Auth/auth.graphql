@@ -3,4 +3,5 @@ type Mutation {
     authUser(login: String!, pass: String!): String!
     invalidateTokens: Boolean!
     createMailTokens: String!
+    verifyByMail(token: String!): String!
 }

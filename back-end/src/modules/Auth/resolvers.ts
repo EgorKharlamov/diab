@@ -1,16 +1,17 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import { exist } from 'joi';
 import { User } from '../../models/User';
 import createUserValidator from '../../helpers/validators/createUserValidator';
 import createTokens from '../../auth';
-import { dateAccess, dateRefresh } from '../../helpers/tokensLife';
+import { dateAccess, dateRefresh, isMailTokenAlive } from '../../helpers/tokensLife';
 import { MailToken } from '../../models/MailTokens';
 
 export default {
 
   Mutation: {
-    createUser: async (_:any, { login, pass, email }: any, { req }:any) => {
+    createUser: async (_: any, { login, pass, email }: any, { req }: any) => {
       const validator = createUserValidator.validate({ login, pass, email });
 
       const userLogin = await User.findOne({ 'login.login': login });
@@ -40,7 +41,7 @@ export default {
       return 'Success!';
     },
 
-    authUser: async (_:any, { login, pass }:any, { req, res }:any) => {
+    authUser: async (_: any, { login, pass }: any, { req, res }: any) => {
       const user = await User.findOne({ 'login.login': login });
 
       // console.log(login, pass);
@@ -55,13 +56,13 @@ export default {
 
       const { refreshToken, accessToken } = createTokens(user);
 
-      res.cookie('refresh-token', refreshToken, { expires: dateRefresh, secure: true });
-      res.cookie('access-token', accessToken, { expires: dateAccess, secure: true });
+      res.cookie('refresh-token', refreshToken, { expires: dateRefresh });
+      res.cookie('access-token', accessToken, { expires: dateAccess });
 
       return 'All right!';
     },
 
-    invalidateTokens: async (_:any, __:any, { req, res }:any) => {
+    invalidateTokens: async (_: any, __: any, { req, res }: any) => {
       if (!req.userId) {
         return false;
       }
@@ -80,15 +81,18 @@ export default {
       return true;
     },
 
-    createMailTokens: async (_:any, __:any, { req, res }:any) => {
-      // console.log(req.userId);
+    createMailTokens: async (_: any, __: any, { req, res }: any) => {
       const user = await User.findOne({ _id: req.userId });
-      if (!user) {
+      if (!user || user.login.email.verified) {
         throw new Error('No no no!');
       }
       const token = new MailToken({ userId: user.id, token: crypto.randomBytes(16).toString('hex') });
-      // const targetMail = user.login.email.value;
-      const targetMail = 'egorkharlamov9338@gmail.com';
+      const targetMail = user.login.email.value;
+
+      const existToken = await MailToken.findOne({ userId: req.userId });
+      if (existToken && isMailTokenAlive(existToken.createdAt)) {
+        return 'Your previous token is alive! Check your email again!';
+      }
 
       const transporter = nodemailer.createTransport({
         service: process.env.MAIL_SERVICE_NAME,
@@ -103,7 +107,7 @@ export default {
         from: process.env.MAIL_USER,
         to: targetMail,
         subject: 'Account verification',
-        text: `Hi there! Its your verification code, be careful!\n${token.token}`,
+        text: `Hi there! Its your verification code, be careful!\n${token.token}\nYou have 5 minutes!`,
       };
 
       await transporter.sendMail(mailOpt, async (err) => {
@@ -112,11 +116,36 @@ export default {
           return 'error';
         }
         console.log('Success!');
-        await token.save();
+        if (existToken) {
+          await MailToken.findByIdAndUpdate(
+            existToken.id,
+            { token: token.token, createdAt: new Date().toISOString() },
+          );
+        } else {
+          await token.save();
+        }
+
         return 'Success!';
       });
 
       return 'Check your mail!';
+    },
+
+    verifyByMail: async (_: any, { token }: any, { req, res }: any) => {
+      const user = await User.findOne({ _id: req.userId });
+      if (!user || !token) {
+        throw new Error('No no no!');
+      }
+      const existToken = await MailToken.findOne({ userId: req.userId });
+      if (existToken && isMailTokenAlive(existToken.createdAt)) {
+        await User.findByIdAndUpdate(
+          { _id: req.userId },
+          { 'login.email.verified': true },
+        );
+        await MailToken.findOneAndDelete({ userId: req.userId });
+        return 'Successful verifying!';
+      }
+      return 'Something wrong... Hmmm....';
     },
   },
 };
