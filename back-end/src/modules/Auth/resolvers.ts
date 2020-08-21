@@ -94,6 +94,15 @@ export default {
         return 'Your previous token is alive! Check your email again!';
       }
 
+      if (existToken) {
+        await MailToken.findByIdAndUpdate(
+          existToken.id,
+          { token: token.token, createdAt: new Date().toISOString() },
+        );
+      } else {
+        await token.save();
+      }
+
       const transporter = nodemailer.createTransport({
         service: process.env.MAIL_SERVICE_NAME,
         port: Number(process.env.MAIL_PORT),
@@ -112,19 +121,8 @@ export default {
 
       await transporter.sendMail(mailOpt, async (err) => {
         if (err) {
-          console.log(err);
           return 'error';
         }
-        console.log('Success!');
-        if (existToken) {
-          await MailToken.findByIdAndUpdate(
-            existToken.id,
-            { token: token.token, createdAt: new Date().toISOString() },
-          );
-        } else {
-          await token.save();
-        }
-
         return 'Success!';
       });
 
