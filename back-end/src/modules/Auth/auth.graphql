@@ -4,4 +4,5 @@ type Mutation {
     invalidateTokens: Boolean!
     createMailTokens: String!
     verifyByMail(token: String!): String!
+    passRecovery(email: String!): String!
 }

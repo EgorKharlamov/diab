@@ -1,11 +1,12 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import nodemailer from 'nodemailer';
 import { User } from '../../models/User';
 import createUserValidator from '../../validators/createUserValidator';
 import createTokens from '../../helpers/auth';
 import { dateAccess, dateRefresh, isMailTokenAlive } from '../../helpers/tokensLife';
 import { MailToken } from '../../models/MailTokens';
+import { PassRecovery } from '../../models/PassRecovery';
+import { Mailer } from '../../services/mail';
 
 export default {
 
@@ -41,6 +42,8 @@ export default {
     },
 
     authUser: async (_: any, { login, pass }: any, { req, res }: any) => {
+      // TODO login with recovery pass with email
+
       const user = await User.findOne({ 'login.login': login });
 
       if (!user) {
@@ -101,28 +104,8 @@ export default {
         await token.save();
       }
 
-      const transporter = nodemailer.createTransport({
-        service: process.env.MAIL_SERVICE_NAME,
-        port: Number(process.env.MAIL_PORT),
-        auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS,
-        },
-      });
-
-      const mailOpt = {
-        from: process.env.MAIL_USER,
-        to: targetMail,
-        subject: 'Account verification',
-        text: `Hi there! Its your verification code, be careful!\n${token.token}\nYou have 5 minutes!`,
-      };
-
-      await transporter.sendMail(mailOpt, async (err) => {
-        if (err) {
-          return 'error';
-        }
-        return 'Success!';
-      });
+      const mailer = new Mailer(targetMail);
+      await mailer.sendVerification(token.token);
 
       return 'Check your mail!';
     },
@@ -142,6 +125,27 @@ export default {
         return 'Successful verifying!';
       }
       return 'Something wrong... Hmmm....';
+    },
+
+    passRecovery: async (_:any, { email }:any, __:any) => {
+      const user = await User.findOne({ 'login.email.value': email });
+      if (!user) {
+        return 'No no no!';
+      }
+
+      const isTempPassExistForUser = await PassRecovery.findOne({ email });
+      const pass = crypto.randomBytes(8).toString('hex');
+      if (isTempPassExistForUser) {
+        await PassRecovery.findByIdAndUpdate(isTempPassExistForUser.id, {
+          passRecovery: pass,
+          updatedAt: new Date().toISOString(),
+        });
+      } else {
+        const tempPass = new PassRecovery({ email, passRecovery: pass });
+        await tempPass.save();
+      }
+
+      return 'Success!';
     },
   },
 };
