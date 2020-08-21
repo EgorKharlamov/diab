@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
-import { exist } from 'joi';
 import { User } from '../../models/User';
 import createUserValidator from '../../helpers/validators/createUserValidator';
 import createTokens from '../../auth';
@@ -44,7 +43,6 @@ export default {
     authUser: async (_: any, { login, pass }: any, { req, res }: any) => {
       const user = await User.findOne({ 'login.login': login });
 
-      // console.log(login, pass);
       if (!user) {
         throw new Error('Not today!');
       }
