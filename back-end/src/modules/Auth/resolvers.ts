@@ -2,8 +2,8 @@ import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { User } from '../../models/User';
-import createUserValidator from '../../helpers/validators/createUserValidator';
-import createTokens from '../../auth';
+import createUserValidator from '../../validators/createUserValidator';
+import createTokens from '../../helpers/auth';
 import { dateAccess, dateRefresh, isMailTokenAlive } from '../../helpers/tokensLife';
 import { MailToken } from '../../models/MailTokens';
 

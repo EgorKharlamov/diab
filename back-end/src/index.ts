@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import { verify } from 'jsonwebtoken';
 import colors from 'colors';
 import { User } from './models/User';
-import createTokens from './auth';
+import createTokens from './helpers/auth';
 import { dateAccess, dateRefresh } from './helpers/tokensLife';
 
 import { UserModule } from './modules/User';

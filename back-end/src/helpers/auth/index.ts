@@ -1,5 +1,5 @@
 import { sign } from 'jsonwebtoken';
-import { iUser } from '../models/User';
+import { iUser } from '../../models/User';
 
 require('dotenv').config();
 
