@@ -6,7 +6,6 @@ export interface iDairy extends Document{
   userId: string,
 
   date: string,
-  time: string,
   pressure: {
       up: number,
       down: number
@@ -22,7 +21,6 @@ const DairySchema: Schema = new Schema({
   userId: { type: String, required: true },
 
   date: { type: String, required: true },
-  time: { type: String, required: true },
   pressure: {
     up: { type: Number, required: true },
     down: { type: Number, required: true },
