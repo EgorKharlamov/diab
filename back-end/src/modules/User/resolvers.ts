@@ -5,7 +5,7 @@ export default {
 
   Query: {
     hello: () => 'Hi there!',
-    me: async (_:any, __:any, { req }:any) => {
+    me: async (_: any, __: any, { req }: any) => {
       if (!req.userId) {
         throw new Error('Hi, guest!');
       }
@@ -14,7 +14,7 @@ export default {
         user.login.pass = '*'.repeat(randInt(1, 40));
         return user;
       }
-      return 'Something wrong...';
+      throw new Error('Something wrong...');
     },
     users: () => User.find().map((el) => el.map((each) => each.login.login)),
   },

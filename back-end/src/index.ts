@@ -39,7 +39,7 @@ const startServer = async () => {
       const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET as string) as any;
       req.userId = data.userId;
       return next();
-    } catch (e) {}
+    } catch (e) { }
 
     if (!refreshToken) {
       return next();
