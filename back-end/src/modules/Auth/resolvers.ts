@@ -46,8 +46,6 @@ export default {
     authUser: async (_: any, { entry, pass }: any, { req, res }: any) => {
       let user:iUser|null;
 
-      // TODO refactor this!
-
       user = await User.findOne({ 'login.login': entry });
       if (!user) user = await User.findOne({ 'login.email.value': entry });
       if (!user) user = await User.findOne({ 'login.phone.value': entry });
