@@ -67,7 +67,7 @@ const startServer = async () => {
 
   server.applyMiddleware({ app });
 
-  await mongoose.connect('mongodb://127.0.0.1:27017/', {
+  await mongoose.connect(`mongodb://${process.env.DB_ADDR}:${process.env.DB_PORT}/`, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
