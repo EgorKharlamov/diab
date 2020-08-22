@@ -1,11 +1,13 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import { User } from '../../models/User';
+import { iUser, User } from '../../models/User';
 import createUserValidator from '../../validators/createUserValidator';
 import createTokens from '../../helpers/auth';
-import { dateAccess, dateRefresh, isMailTokenAlive } from '../../helpers/tokensLife';
+import {
+  dateAccess, dateRefresh, isMailTokenAlive, isPassRecoveryAlive,
+} from '../../helpers/tokensLife';
 import { MailToken } from '../../models/MailTokens';
-import { PassRecovery } from '../../models/PassRecovery';
+import { iPassRecovery, PassRecovery } from '../../models/PassRecovery';
 import { Mailer } from '../../services/mail';
 
 export default {
@@ -41,25 +43,34 @@ export default {
       return 'Success!';
     },
 
-    authUser: async (_: any, { login, pass }: any, { req, res }: any) => {
-      // TODO login with recovery pass with email
+    authUser: async (_: any, { entry, pass }: any, { req, res }: any) => {
+      let user:iUser|null;
 
-      const user = await User.findOne({ 'login.login': login });
+      // TODO refactor this!
 
+      user = await User.findOne({ 'login.login': entry });
+      if (!user) user = await User.findOne({ 'login.email.value': entry });
+      if (!user) user = await User.findOne({ 'login.phone.value': entry });
       if (!user) {
         throw new Error('Not today!');
       }
 
-      const dehashPass = await bcrypt.compare(pass, user.login.pass);
-      if (!dehashPass) {
-        throw new Error('Not today!');
+      const userRecovery = await PassRecovery.findOne({ userId: user.id });
+
+      if (!userRecovery) {
+        const dehashPass = await bcrypt.compare(pass, user.login.pass);
+        if (!dehashPass) {
+          throw new Error('Not today!');
+        }
+      } else {
+        const hashPass = await bcrypt.hash(pass, 10);
+        await User.findOneAndUpdate({ id: userRecovery.userId }, { 'login.pass': hashPass });
+        await PassRecovery.findByIdAndDelete(userRecovery.id);
       }
 
       const { refreshToken, accessToken } = createTokens(user);
-
       res.cookie('refresh-token', refreshToken, { expires: dateRefresh });
       res.cookie('access-token', accessToken, { expires: dateAccess });
-
       return 'All right!';
     },
 
@@ -135,17 +146,22 @@ export default {
 
       const isTempPassExistForUser = await PassRecovery.findOne({ email });
       const pass = crypto.randomBytes(8).toString('hex');
-      if (isTempPassExistForUser) {
+      if (isTempPassExistForUser && isPassRecoveryAlive(isTempPassExistForUser.updatedAt)) {
+        return 'Recovery pass alive yet! Please check email again!';
+      }
+      if (isTempPassExistForUser && !isPassRecoveryAlive(isTempPassExistForUser.updatedAt)) {
         await PassRecovery.findByIdAndUpdate(isTempPassExistForUser.id, {
           passRecovery: pass,
           updatedAt: new Date().toISOString(),
         });
-      } else {
-        const tempPass = new PassRecovery({ email, passRecovery: pass });
+      } else if (!isTempPassExistForUser) {
+        const tempPass = new PassRecovery({ email, passRecovery: pass, userId: user.id });
         await tempPass.save();
       }
 
-      return 'Success!';
+      const mailer = new Mailer(email);
+      await mailer.sendRecoveryPass(pass);
+      return 'New pass waiting for you! Check email!';
     },
   },
 };

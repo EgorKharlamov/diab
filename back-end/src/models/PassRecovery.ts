@@ -3,6 +3,7 @@ import {
 } from 'mongoose';
 
 export interface iPassRecovery extends Document{
+    userId: string,
     email: string,
     passRecovery: string,
     createdAt: string,
@@ -10,6 +11,7 @@ export interface iPassRecovery extends Document{
 }
 
 const PassRecoverySchema: Schema = new Schema({
+  userId: { type: String, required: true },
   email: { type: String, required: true },
   passRecovery: { type: String, required: true },
   createdAt: { type: String, required: true, default: new Date().toISOString() },
