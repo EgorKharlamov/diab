@@ -13,7 +13,7 @@ type UserAuth {
     login: String!
     pass: String!
     email: Email!
-    phone: String
+    phone: Phone
 }
 
 type Email {

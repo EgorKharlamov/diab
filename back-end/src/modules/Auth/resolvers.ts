@@ -143,7 +143,7 @@ export default {
       }
 
       const isTempPassExistForUser = await PassRecovery.findOne({ email });
-      const pass = crypto.randomBytes(8).toString('hex');
+      const pass = crypto.randomBytes(4).toString('hex');
       if (isTempPassExistForUser && isPassRecoveryAlive(isTempPassExistForUser.updatedAt)) {
         return 'Recovery pass alive yet! Please check email again!';
       }

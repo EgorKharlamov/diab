@@ -1,14 +1,20 @@
 import { User } from '../../models/User';
+import { randInt } from '../../helpers/math';
 
 export default {
 
   Query: {
     hello: () => 'Hi there!',
-    me: (_:any, __:any, { req }:any) => {
+    me: async (_:any, __:any, { req }:any) => {
       if (!req.userId) {
         throw new Error('Hi, guest!');
       }
-      return User.findOne({ _id: req.userId });
+      const user = await User.findOne({ _id: req.userId });
+      if (user) {
+        user.login.pass = '*'.repeat(randInt(1, 40));
+        return user;
+      }
+      return 'Something wrong...';
     },
     users: () => User.find().map((el) => el.map((each) => each.login.login)),
   },
