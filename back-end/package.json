@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node build/index.js",
+    "start": "node build/index.js",
     "dev": "nodemon",
     "clean": "rimraf build",
     "build": "npm run clean && node_modules/typescript/bin/tsc -p . && npm run copySchemas",

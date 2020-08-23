@@ -1,5 +1,4 @@
 import express from 'express';
-import path from 'path';
 import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -80,16 +79,9 @@ const startServer = async () => {
 
   console.log(' 🕊  Connected to mongo database', `${process.env.DB_NAME}`.magenta);
 
-  // ---front-end---
-  // app.use(express.static(path.join(__dirname, '../../front-end/build')));
-  // app.get('/', (req, res) => {
-  //   res.sendFile(path.join(__dirname, '../../front-end/build', 'index.html'));
-  // });
-
   const portBack: number = Number(process.env.PORT || 8000);
   app.listen(portBack, () => {
     console.log(' 🦄 Server started at', `http://${process.env.URL || 'localhost'}:${portBack}${server.graphqlPath}`.magenta);
-    // console.log(' 🦄 Front started at', `http://${process.env.URL}`.magenta);
   });
 };
 
