@@ -1,7 +1,9 @@
 import axios from 'axios';
+import { addr } from '../config/addr'
 
-export const requester = (query:string, variables?:Record<string | number, undefined>) => {
-  const url = 'http://localhost:8000/graphql';
+export const requester = (query: string, variables?: Record<string | number, undefined>) => {
+
+  const url = `${addr.protocol || 'http'}://${addr.domain || 'localhost'}:${addr.port || 8000}/graphql`;
   const method = 'post';
   const headers = {
     'Content-Type': 'application/json'
