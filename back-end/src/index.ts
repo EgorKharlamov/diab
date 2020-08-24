@@ -79,15 +79,9 @@ const startServer = async () => {
 
   console.log(' 🕊  Connected to mongo database', `${process.env.DB_NAME}`.magenta);
 
-<<<<<<< HEAD
   const portBack: number = Number(process.env.PORT || 8000);
   app.listen(portBack, () => {
     console.log(' 🦄 Server started at', `http://${process.env.URL || 'localhost'}:${portBack}${server.graphqlPath}`.magenta);
-=======
-  const port: number = Number(process.env.PORT);
-  app.listen({ port }, () => {
-    console.log(' 🦄 Server started at', `http://localhost:${port}${server.graphqlPath}`.magenta);
->>>>>>> parent of 8889d13... add config, change paths for reqs
   });
 };
 
