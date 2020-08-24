@@ -44,8 +44,7 @@ export default {
     },
 
     authUser: async (_: any, { entry, pass }: any, { req, res }: any) => {
-      let user:iUser|null;
-
+      let user: iUser | null;
       user = await User.findOne({ 'login.login': entry });
       if (!user) user = await User.findOne({ 'login.email.value': entry });
       if (!user) user = await User.findOne({ 'login.phone.value': entry });
@@ -54,7 +53,6 @@ export default {
       }
 
       const userRecovery = await PassRecovery.findOne({ userId: user.id });
-
       if (!userRecovery) {
         const dehashPass = await bcrypt.compare(pass, user.login.pass);
         if (!dehashPass) {
@@ -62,7 +60,7 @@ export default {
         }
       } else {
         const hashPass = await bcrypt.hash(pass, 10);
-        await User.findOneAndUpdate({ id: userRecovery.userId }, { 'login.pass': hashPass });
+        await User.findByIdAndUpdate(userRecovery.userId, { 'login.pass': hashPass });
         await PassRecovery.findByIdAndDelete(userRecovery.id);
       }
 
@@ -136,7 +134,7 @@ export default {
       return 'Something wrong... Hmmm....';
     },
 
-    passRecovery: async (_:any, { email }:any, __:any) => {
+    passRecovery: async (_: any, { email }: any, __: any) => {
       const user = await User.findOne({ 'login.email.value': email });
       if (!user) {
         return 'No no no!';
