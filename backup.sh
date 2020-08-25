@@ -5,8 +5,6 @@ export $(grep -v '^#' back-end/.env | xargs)
 DUMP_DATE=$(date +%Y-%m-%d_%T)
 BACKUP_FOLDER="db-mongo-backups"
 
-# docker-compose exec -T mongodb mongorestore --archive --gzip < dump.gz
-
 function createFolder() {
     if [ ! -d "./$BACKUP_FOLDER" ]; then
         mkdir -p "$BACKUP_FOLDER"
@@ -24,8 +22,6 @@ function selectFile() {
 
         elif ((REPLY > 0 && REPLY <= ${#options[@]})); then
             FILE_NAME=$(echo $opt | cut -f3 -d/)
-
-            # echo "You picked $FILE_NAME which is file $REPLY"
             break
 
         else
