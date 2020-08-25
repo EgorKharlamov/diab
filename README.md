@@ -73,6 +73,7 @@ mutation {
 ```
 
 ### Verify user by token
+*You dont need to be logged in!*
 ```sh
 mutation {
   verifyByMail(token:"token_value")
