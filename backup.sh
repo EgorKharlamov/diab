@@ -15,13 +15,17 @@ function selectFile() {
     prompt="Select dump to restore:"
     options=($(find ./$BACKUP_FOLDER -type f -print0 | xargs -0))
 
+    for opt in "${!options[@]}"; do
+        options[opt]=$(echo ${options[opt]} | cut -f3 -d/)
+    done
+
     PS3="$prompt "
     select opt in "${options[@]}" "Quit"; do
         if ((REPLY == 1 + ${#options[@]})); then
             exit
 
         elif ((REPLY > 0 && REPLY <= ${#options[@]})); then
-            FILE_NAME=$(echo $opt | cut -f3 -d/)
+            FILE_NAME=$opt
             break
 
         else
@@ -61,6 +65,7 @@ function main() {
         echo "restore:"
         echo "        -r     - restore with choosing dump file name"
         echo "        -r BAR - restore with BAR name [e.g. backup.sh -r BAR -> restore BAR.gz]"
+        echo "                 ATTENTION same names rewrites!"
         exit 0
         ;;
     -b | --backup)
