@@ -1,12 +1,30 @@
-# How to
-- fill <b>.env</b> as <b>.env.example</b>
+## Back-end
+- TypeScript
+- Express
+- Mongo (mongoose)
+- Graphql
 
-### Start mongo in docker container
-- run `docker-compose up -d --build` 
+## Front-end
+-  <i>front-end doesnt work yet :(</i>
 
-### Start back-end
-- run `cd back-end` 
-- fill <b>.env</b> as <b>.env.example</b>
-- run `npm i && npm run build && npm run start`
 
-front-end doesnt work yet :(
+## How to
+Create and fill **.env** as **.env.example**
+
+Start mongo in docker container
+```sh
+docker-compose up -d --build
+```
+
+Move to back-end dir
+```sh
+cd back-end
+``` 
+
+Create and fill **.env** as **.env.example**
+
+Start back-end
+```
+npm i && npm run build && npm run start
+```
+
