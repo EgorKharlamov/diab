@@ -7,6 +7,19 @@
 ## Front-end
 -  *front-end doesnt work yet :(*
 
+## Table
+
+  - [How to up project](#how-to)
+  - [All docs](#docs)
+    - [**Get your user**](#get-your-user)
+    - [**Create user**](#create-user)
+    - [**Authenticate user**](#authenticate-user)
+    - [**Log out user**](#log-out-user)
+    - [**Create verify user token**](#create-verify-user-token)
+    - [**Verify user by token**](#verify-user-by-token)
+    - [**Password recovery**](#password-recovery)
+    - [**Add dairy sheet**](#add-dairy-sheet)
+  - [**Backup** and **restore** database](#backup)
 
 ## How to
 Create and fill **.env** as **.env.example**
