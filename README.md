@@ -5,7 +5,7 @@
 - Graphql
 
 ## Front-end
--  <i>front-end doesnt work yet :(</i>
+-  *front-end doesnt work yet :(*
 
 
 ## How to
@@ -100,4 +100,9 @@ mutation {
     weight: float
   )
 }
+```
+---
+## Backup
+```sh
+bash backup.sh -h
 ```

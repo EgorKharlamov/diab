@@ -3,5 +3,5 @@
 node_modules
 build
 .env
-db-mongo/*.gz
+db-mongo-backups
 makefile
