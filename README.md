@@ -87,7 +87,7 @@ mutation {
 }
 ```
 
-### Password recovery
+### Add dairy sheet
 *Surprise, you need being logged in :)*
 ```sh
 mutation {
