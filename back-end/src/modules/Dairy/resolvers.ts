@@ -10,7 +10,7 @@ export default {
     // check user auth
       const user = await User.findOne({ _id: req.userId });
       if (!user || !user.login.email.verified) {
-        return 'Not today!';
+        throw new Error('Not today!');
       }
 
       const currentDate = new Date().toISOString();
@@ -18,7 +18,7 @@ export default {
         .filter((el) => el.userId === req.userId && getDateOnly(el.date) === getDateOnly(date));
 
       if (allUserDairySheet.length >= 3) {
-        return 'You have max sheets today!';
+        throw new Error('You have max sheets today!');
       }
 
       await new Dairy({

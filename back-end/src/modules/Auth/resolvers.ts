@@ -7,7 +7,7 @@ import {
   dateAccess, dateRefresh, isMailTokenAlive, isPassRecoveryAlive,
 } from '../../helpers/tokensLife';
 import { MailToken } from '../../models/MailTokens';
-import { iPassRecovery, PassRecovery } from '../../models/PassRecovery';
+import { PassRecovery } from '../../models/PassRecovery';
 import { Mailer } from '../../services/mail';
 
 export default {
@@ -20,7 +20,7 @@ export default {
       const userEmail = await User.findOne({ 'login.email.value': email });
 
       if (validator.error) {
-        return validator.error?.details[0].message;
+        throw new Error(validator.error?.details[0].message);
       }
 
       if (userLogin || userEmail) {
@@ -44,6 +44,11 @@ export default {
     },
 
     authUser: async (_: any, { entry, pass }: any, { req, res }: any) => {
+      const isLoggedIn = await User.findOne({ _id: req.userId });
+      if (isLoggedIn) {
+        throw new Error('You\'re already logged in!');
+      }
+
       let user: iUser | null;
       user = await User.findOne({ 'login.login': entry });
       if (!user) user = await User.findOne({ 'login.email.value': entry });
@@ -99,7 +104,7 @@ export default {
 
       const existToken = await MailToken.findOne({ userId: req.userId });
       if (existToken && isMailTokenAlive(existToken.createdAt)) {
-        return 'Your previous token is alive! Check your email again!';
+        throw new Error('Your previous token is alive! Check your email again!');
       }
 
       if (existToken) {
@@ -131,19 +136,19 @@ export default {
         await MailToken.findOneAndDelete({ userId: req.userId });
         return 'Successful verifying!';
       }
-      return 'Something wrong... Hmmm....';
+      throw new Error('Something wrong... Hmmm....');
     },
 
     passRecovery: async (_: any, { email }: any, __: any) => {
       const user = await User.findOne({ 'login.email.value': email });
       if (!user) {
-        return 'No no no!';
+        throw new Error('No no no!');
       }
 
       const isTempPassExistForUser = await PassRecovery.findOne({ email });
       const pass = crypto.randomBytes(4).toString('hex');
       if (isTempPassExistForUser && isPassRecoveryAlive(isTempPassExistForUser.updatedAt)) {
-        return 'Recovery pass alive yet! Please check email again!';
+        throw new Error('Recovery pass alive yet! Please check email again!');
       }
       if (isTempPassExistForUser && !isPassRecoveryAlive(isTempPassExistForUser.updatedAt)) {
         await PassRecovery.findByIdAndUpdate(isTempPassExistForUser.id, {
