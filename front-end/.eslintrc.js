@@ -1,48 +1,43 @@
-// eslint-disable-next-line no-undef
 module.exports = {
-  'env': {
-    'browser': true,
-    'es2020': true
+  env: {
+    browser: true,
+    es2020: true,
   },
-  'extends': [
-    'eslint:recommended',
+  extends: [
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:jsx-a11y/recommended'
+    'prettier',
+    'prettier/react',
+    'prettier/@typescript-eslint',
+    'airbnb',
   ],
-  'parser': '@typescript-eslint/parser',
-  'parserOptions': {
-    'ecmaFeatures': {
-      'jsx': true
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    'ecmaVersion': 11,
-    'sourceType': 'module'
+    ecmaVersion: 12,
+    sourceType: 'module',
   },
-  'plugins': [
+  plugins: [
     'react',
     '@typescript-eslint',
-    'jsx-a11y'
   ],
-  'rules': {
-    'indent': [
+
+  settings: {
+    react: {
+      version: 'detect', // Automatically detect the react version
+    },
+  },
+  rules: {
+    'react/jsx-filename-extension': [0, { extensions: ['.js', '.jsx'] }],
+    'react/react-in-jsx-scope': 'off',
+    'jsx-a11y/anchor-is-valid': [
       'error',
-      2
+      {
+        components: ['Link'],
+        specialLink: ['hrefLeft', 'hrefRight'],
+        aspects: ['invalidHref', 'preferButton'],
+      },
     ],
-    'linebreak-style': [
-      'error',
-      'unix'
-    ],
-    'quotes': [
-      'error',
-      'single'
-    ],
-    'semi': [
-      'error',
-      'always'
-    ],
-    'no-multiple-empty-lines': [
-      'error',
-      { 'max': 1, 'maxEOF': 1 }
-    ]
-  }
+  },
 };
