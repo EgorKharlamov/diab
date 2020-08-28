@@ -1,22 +1,33 @@
 import axios from 'axios';
 
-const requester = (query:string, variables?:Record<string | number, undefined>) => {
+axios.defaults.withCredentials = true;
+const requester = async (query:string, ctx?:any) => {
   const url = 'http://localhost:8000/graphql';
   const method = 'post';
-  const headers = {
-    'Content-Type': 'application/json',
-  };
+  let headers;
+  if (ctx && ctx.req && ctx.req.headers && ctx.req.headers.cookie) {
+    headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      cookie: ctx.req.headers.cookie,
+    };
+  } else {
+    headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  }
+
   const data = {
     query,
-    variables,
   };
-  return axios({
-    withCredentials: true,
+  const response = await axios({
     url,
     method,
     headers,
     data,
   });
+  return response.data;
 };
 
 export default requester;

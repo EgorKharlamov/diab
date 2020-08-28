@@ -24,10 +24,13 @@ const startServer = async () => {
   });
 
   const app = express();
+
   app.use(cors({
     origin: true,
-    credentials: true
+    credentials: true,
+    optionsSuccessStatus: 200,
   }));
+
   app.use(cookieParser());
 
   app.use(async (req: any, res: any, next) => {
@@ -62,13 +65,18 @@ const startServer = async () => {
 
     const tokens = createTokens(user);
 
-    res.cookie('refresh-token', tokens.refreshToken, { expires: dateRefresh, secure: true });
-    res.cookie('access-token', tokens.accessToken, { expires: dateAccess, secure: true });
+    res.cookie('refresh-token', tokens.refreshToken, { expires: dateRefresh, domain: '' });
+    res.cookie('access-token', tokens.accessToken, { expires: dateAccess, domain: '' });
     req.userId = user.id;
+
     next();
   });
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({
+    app,
+    path: '/',
+    cors: false,
+  });
 
   await mongoose.connect(`mongodb://${process.env.DB_ADDR}:${process.env.DB_PORT}/`, {
     useNewUrlParser: true,

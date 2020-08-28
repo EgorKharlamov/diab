@@ -1,6 +1,5 @@
 import React from 'react';
 import NextLink from 'next/link';
-import { AxiosResponse } from 'axios';
 import s from '../styles/Home.module.sass';
 import requester from '../helpers/requester';
 
@@ -31,9 +30,9 @@ export default function Home({ user }:any) {
   );
 }
 
-export async function getStaticProps() {
-  let whoAmI:AxiosResponse = await requester('{me {login {login email{value verified} pass phone{value verified}}}}');
-  whoAmI = whoAmI.data.data ? whoAmI.data.data : whoAmI.data.errors[0].message;
+export async function getServerSideProps(ctx) {
+  let whoAmI = await requester('{me {login {login email{value verified} pass phone{value verified}}}}', ctx);
+  whoAmI = whoAmI.data ? whoAmI.data.me.login.login : whoAmI.errors[0].message;
   return {
     props: {
       user: whoAmI,
