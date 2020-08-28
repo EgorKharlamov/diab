@@ -27,9 +27,18 @@ module.exports = {
     react: {
       version: 'detect', // Automatically detect the react version
     },
+    'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
   },
   rules: {
-    'react/jsx-filename-extension': [0, { extensions: ['.js', '.jsx'] }],
+    'react/jsx-filename-extension': [0, { extensions: ['.js', '.jsx', '.tsx'] }],
     'react/react-in-jsx-scope': 'off',
     'jsx-a11y/anchor-is-valid': [
       'error',
@@ -37,6 +46,24 @@ module.exports = {
         components: ['Link'],
         specialLink: ['hrefLeft', 'hrefRight'],
         aspects: ['invalidHref', 'preferButton'],
+      },
+    ],
+    'react/jsx-props-no-spreading': 'off',
+    'react/prop-types': 0,
+    // 'import/prefer-default-export': 'off',
+    // 'import/no-default-export': 'error',
+    'import/no-unresolved': 0,
+    'no-underscore-dangle': ['error', { allow: ['__typename'] }],
+    '@typescript-eslint/no-unused-vars': [2, { args: 'none' }],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+        mjs: 'never',
       },
     ],
   },
