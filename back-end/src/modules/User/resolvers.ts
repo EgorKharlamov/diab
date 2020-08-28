@@ -7,7 +7,7 @@ export default {
     hello: () => 'Hi there!',
     me: async (_: any, __: any, { req }: any) => {
       if (!req.userId) {
-        throw new Error('Hi, guest!');
+        throw new Error('Guest');
       }
       const user = await User.findOne({ _id: req.userId });
       if (user) {

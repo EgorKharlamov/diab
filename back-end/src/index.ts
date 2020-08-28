@@ -24,7 +24,10 @@ const startServer = async () => {
   });
 
   const app = express();
-  app.use(cors());
+  app.use(cors({
+    origin: true,
+    credentials: true
+  }));
   app.use(cookieParser());
 
   app.use(async (req: any, res: any, next) => {
