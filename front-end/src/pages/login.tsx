@@ -22,16 +22,26 @@ export default function Login() {
 
   const onClickHandlerSignUp = async () => {
     try {
-      const createUser = await requester(`mutation{ createUser(login:"${login}" pass:"${pass}" email:"${email}")}`);
+      const createUser = await requester.createUser({ login, email, pass });
       console.log(createUser);
-    } catch (e) {}
+    } catch (e) { return null; }
+    return null;
   };
 
   const onClickHandlerSignIn = async () => {
     try {
-      const logIn = await requester(`mutation{ authUser(entry:"${login}" pass:"${pass}")}`);
+      const logIn = await requester.authUser({ entry: login, pass });
       console.log(logIn);
-    } catch (e) {}
+    } catch (e) { return null; }
+    return null;
+  };
+
+  const onClickHandlerLogOut = async () => {
+    try {
+      const logOut = await requester.logOutUser();
+      console.log(logOut);
+    } catch (e) { return null; }
+    return null;
   };
 
   return (
@@ -57,6 +67,7 @@ export default function Login() {
 
         <button type="button" onClick={onClickHandlerSignIn}>Sign in!</button>
         <button type="button" onClick={onClickHandlerSignUp}>Sign up!</button>
+        <button type="button" onClick={onClickHandlerLogOut}>Log out!</button>
       </form>
 
     </>

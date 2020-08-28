@@ -8,7 +8,7 @@ export default function Home({ user }:any) {
 
   const handlerOnClickGetMe = async () => {
     try {
-      const res = await requester('{me {login {login email{value verified} pass phone{value verified}}}}');
+      const res = await requester.whoAmI();
       console.log(res);
     } catch (e) {}
   };
@@ -30,12 +30,13 @@ export default function Home({ user }:any) {
   );
 }
 
-export async function getServerSideProps(ctx) {
-  let whoAmI = await requester('{me {login {login email{value verified} pass phone{value verified}}}}', ctx);
-  whoAmI = whoAmI.data ? whoAmI.data.me.login.login : whoAmI.errors[0].message;
-  return {
-    props: {
-      user: whoAmI,
-    },
-  };
-}
+// export async function getServerSideProps(ctx) {
+//   console.log('oops');
+//   let whoAmI = await index('{me {login {login email{value verified} pass phone{value verified}}}}', ctx);
+//   whoAmI = whoAmI.data ? whoAmI.data.me.login.login : whoAmI.errors[0].message;
+//   return {
+//     props: {
+//       user: whoAmI,
+//     },
+//   };
+// }

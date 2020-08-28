@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
-const requester = async (query:string, ctx?:any) => {
+const requesterMaster = async (query:string, ctx?:any) => {
   const url = 'http://localhost:8000/graphql';
   const method = 'post';
   let headers;
@@ -29,5 +29,4 @@ const requester = async (query:string, ctx?:any) => {
   });
   return response.data;
 };
-
-export default requester;
+export default requesterMaster;
