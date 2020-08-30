@@ -16,8 +16,8 @@ export default {
     createUser: async (_: any, { login, pass, email }: any, { req }: any) => {
       const validator = createUserValidator.validate({ login, pass, email });
 
-      const userLogin = await User.findOne({ 'login.login': login });
-      const userEmail = await User.findOne({ 'login.email.value': email });
+      const userLogin = await User.findOne({ 'login.login': login.toLowerCase() });
+      const userEmail = await User.findOne({ 'login.email.value': email.toLowerCase() });
 
       if (validator.error) {
         throw new Error(validator.error?.details[0].message);
@@ -31,10 +31,10 @@ export default {
       const date = new Date().toISOString();
       await new User({
         login: {
-          login,
+          login: login.toLowerCase(),
           pass: hashPass,
           email: {
-            value: email,
+            value: email.toLowerCase(),
           },
         },
         createdAt: date,
@@ -50,8 +50,8 @@ export default {
       }
 
       let user: iUser | null;
-      user = await User.findOne({ 'login.login': entry });
-      if (!user) user = await User.findOne({ 'login.email.value': entry });
+      user = await User.findOne({ 'login.login': entry.toLowerCase() });
+      if (!user) user = await User.findOne({ 'login.email.value': entry.toLowerCase() });
       if (!user) user = await User.findOne({ 'login.phone.value': entry });
       if (!user) {
         throw new Error('Not today!');
@@ -140,12 +140,12 @@ export default {
     },
 
     passRecovery: async (_: any, { email }: any, __: any) => {
-      const user = await User.findOne({ 'login.email.value': email });
+      const user = await User.findOne({ 'login.email.value': email.toLowerCase() });
       if (!user) {
         throw new Error('No no no!');
       }
 
-      const isTempPassExistForUser = await PassRecovery.findOne({ email });
+      const isTempPassExistForUser = await PassRecovery.findOne({ email: email.toLowerCase() });
       const pass = crypto.randomBytes(4).toString('hex');
       if (isTempPassExistForUser && isPassRecoveryAlive(isTempPassExistForUser.updatedAt)) {
         throw new Error('Recovery pass alive yet! Please check email again!');
@@ -156,11 +156,11 @@ export default {
           updatedAt: new Date().toISOString(),
         });
       } else if (!isTempPassExistForUser) {
-        const tempPass = new PassRecovery({ email, passRecovery: pass, userId: user.id });
+        const tempPass = new PassRecovery({ email: email.toLowerCase(), passRecovery: pass, userId: user.id });
         await tempPass.save();
       }
 
-      const mailer = new Mailer(email);
+      const mailer = new Mailer(email.toLowerCase());
       await mailer.sendRecoveryPass(pass);
       return 'New pass waiting for you! Check email!';
     },
