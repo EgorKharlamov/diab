@@ -17,7 +17,7 @@ export default function Home({ user }:any) {
       <h1 className={`${s.h1} bold`}>
         Hi there,
         {' '}
-        {user}
+        { user }
         !
       </h1>
 

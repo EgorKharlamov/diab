@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import { iUser, User } from '../../models/User';
+import { eUserRoles, iUser, User } from '../../models/User';
 import createUserValidator from '../../validators/createUserValidator';
 import createTokens from '../../helpers/auth';
 import {
@@ -40,6 +40,7 @@ export default {
             value: email.toLowerCase(),
             valueShowed: email,
           },
+          role: eUserRoles.user,
         },
         createdAt: date,
         updatedAt: date,

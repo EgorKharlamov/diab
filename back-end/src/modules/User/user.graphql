@@ -14,6 +14,7 @@ type UserAuth {
     pass: String!
     email: Email!
     phone: Phone
+    role: Int!
 }
 
 type Login {

@@ -2,6 +2,10 @@ import {
   Schema, Document, Model, model,
 } from 'mongoose';
 
+export enum eUserRoles {
+  admin,
+  user
+}
 export interface iUser extends Document{
   user: {
     login: {
@@ -18,6 +22,7 @@ export interface iUser extends Document{
       value: string,
       verified: boolean
     },
+    role: number
   },
   count: number,
   createdAt: string,
@@ -40,6 +45,7 @@ const UserSchema: Schema = new Schema({
       value: { type: String },
       verified: { type: Boolean, default: false },
     },
+    role: { type: Number, required: true, default: eUserRoles.user },
   },
   count: { type: Number, required: true, default: 0 },
   createdAt: { type: String, required: true },
