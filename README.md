@@ -46,7 +46,7 @@ npm i && npm run build && npm run start
 ```sh
 {
   me {
-    login {login pass email{value verified} phone{value}}
+    user {login{value valueShowed} pass email{value valueShowed verified} phone{value verified}}
   }
 }
 ```
