@@ -29,14 +29,3 @@ export default function Home({ user }:any) {
     </>
   );
 }
-
-// export async function getServerSideProps(ctx) {
-//   console.log('oops');
-//   let whoAmI = await index('{me {login {login email{value verified} pass phone{value verified}}}}', ctx);
-//   whoAmI = whoAmI.data ? whoAmI.data.me.login.login : whoAmI.errors[0].message;
-//   return {
-//     props: {
-//       user: whoAmI,
-//     },
-//   };
-// }

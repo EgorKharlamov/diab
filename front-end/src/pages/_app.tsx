@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 MyApp.getInitialProps = async ({ ctx }:any) => {
   let whoAmI = await requester.whoAmI(ctx);
-  whoAmI = whoAmI.data ? whoAmI.data.me.login.login : whoAmI.errors[0].message;
+  whoAmI = whoAmI.data ? whoAmI.data.me.user.login.valueShowed : whoAmI.errors[0].message;
   return {
     pageProps: {
       user: whoAmI,

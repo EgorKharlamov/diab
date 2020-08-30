@@ -9,7 +9,7 @@ export default {
     }:any, { req, res }:any) => {
     // check user auth
       const user = await User.findOne({ _id: req.userId });
-      if (!user || !user.login.email.verified) {
+      if (!user || !user.user.email.verified) {
         throw new Error('Not today!');
       }
 

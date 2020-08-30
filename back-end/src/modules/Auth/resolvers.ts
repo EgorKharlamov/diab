@@ -16,8 +16,8 @@ export default {
     createUser: async (_: any, { login, pass, email }: any, { req }: any) => {
       const validator = createUserValidator.validate({ login, pass, email });
 
-      const userLogin = await User.findOne({ 'login.login': login.toLowerCase() });
-      const userEmail = await User.findOne({ 'login.email.value': email.toLowerCase() });
+      const userLogin = await User.findOne({ 'user.login.value': login.toLowerCase() });
+      const userEmail = await User.findOne({ 'user.email.value': email.toLowerCase() });
 
       if (validator.error) {
         throw new Error(validator.error?.details[0].message);
@@ -30,11 +30,15 @@ export default {
       const hashPass = await bcrypt.hash(pass, 10);
       const date = new Date().toISOString();
       await new User({
-        login: {
-          login: login.toLowerCase(),
+        user: {
+          login: {
+            value: login.toLowerCase(),
+            valueShowed: login,
+          },
           pass: hashPass,
           email: {
             value: email.toLowerCase(),
+            valueShowed: email,
           },
         },
         createdAt: date,
@@ -50,22 +54,22 @@ export default {
       }
 
       let user: iUser | null;
-      user = await User.findOne({ 'login.login': entry.toLowerCase() });
-      if (!user) user = await User.findOne({ 'login.email.value': entry.toLowerCase() });
-      if (!user) user = await User.findOne({ 'login.phone.value': entry });
+      user = await User.findOne({ 'user.login.value': entry.toLowerCase() });
+      if (!user) user = await User.findOne({ 'user.email.value': entry.toLowerCase() });
+      if (!user) user = await User.findOne({ 'user.phone.value': entry });
       if (!user) {
         throw new Error('Not today!');
       }
 
       const userRecovery = await PassRecovery.findOne({ userId: user.id });
       if (!userRecovery) {
-        const dehashPass = await bcrypt.compare(pass, user.login.pass);
+        const dehashPass = await bcrypt.compare(pass, user.user.pass);
         if (!dehashPass) {
           throw new Error('Not today!');
         }
       } else {
         const hashPass = await bcrypt.hash(pass, 10);
-        await User.findByIdAndUpdate(userRecovery.userId, { 'login.pass': hashPass });
+        await User.findByIdAndUpdate(userRecovery.userId, { 'user.pass': hashPass });
         await PassRecovery.findByIdAndDelete(userRecovery.id);
       }
 
@@ -96,11 +100,11 @@ export default {
 
     createMailTokens: async (_: any, __: any, { req, res }: any) => {
       const user = await User.findOne({ _id: req.userId });
-      if (!user || user.login.email.verified) {
+      if (!user || user.user.email.verified) {
         throw new Error('No no no!');
       }
       const token = new MailToken({ userId: user.id, token: crypto.randomBytes(16).toString('hex') });
-      const targetMail = user.login.email.value;
+      const targetMail = user.user.email.value;
 
       const existToken = await MailToken.findOne({ userId: req.userId });
       if (existToken && isMailTokenAlive(existToken.createdAt)) {
@@ -131,7 +135,7 @@ export default {
       if (existToken && isMailTokenAlive(existToken.createdAt)) {
         await User.findByIdAndUpdate(
           { _id: req.userId },
-          { 'login.email.verified': true },
+          { 'user.email.verified': true },
         );
         await MailToken.findOneAndDelete({ userId: req.userId });
         return 'Successful verifying!';
@@ -140,7 +144,7 @@ export default {
     },
 
     passRecovery: async (_: any, { email }: any, __: any) => {
-      const user = await User.findOne({ 'login.email.value': email.toLowerCase() });
+      const user = await User.findOne({ 'user.email.value': email.toLowerCase() });
       if (!user) {
         throw new Error('No no no!');
       }

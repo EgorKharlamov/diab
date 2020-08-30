@@ -6,18 +6,24 @@ type Query {
 
 type User {
     id: ID!
-    login: UserAuth!
+    user: UserAuth!
 }
 
 type UserAuth {
-    login: String!
+    login: Login!
     pass: String!
     email: Email!
     phone: Phone
 }
 
+type Login {
+    value: String!
+    valueShowed: String!
+}
+
 type Email {
     value: String!
+    valueShowed: String!
     verified: Boolean
 }
 

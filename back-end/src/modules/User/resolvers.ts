@@ -11,11 +11,11 @@ export default {
       }
       const user = await User.findOne({ _id: req.userId });
       if (user) {
-        user.login.pass = '*'.repeat(randInt(1, 40));
+        user.user.pass = '*'.repeat(randInt(1, 40));
         return user;
       }
       throw new Error('Something wrong...');
     },
-    users: () => User.find().map((el) => el.map((each) => each.login.login)),
+    users: () => User.find().map((el) => el.map((each) => each.user.login)),
   },
 };
