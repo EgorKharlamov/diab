@@ -50,7 +50,7 @@ module.exports = {
     ],
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 0,
-    // 'import/prefer-default-export': 'off',
+    'import/prefer-default-export': 'off',
     // 'import/no-default-export': 'error',
     'import/no-unresolved': 0,
     'no-underscore-dangle': ['error', { allow: ['__typename'] }],

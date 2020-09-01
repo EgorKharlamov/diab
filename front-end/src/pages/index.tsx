@@ -1,31 +1,26 @@
 import React from 'react';
 import NextLink from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
 import s from '../styles/Home.module.sass';
-import requester from '../helpers/requester';
+import { iState } from '../store';
 
-export default function Home({ user }:any) {
-  // const [];
+export const Home = () => {
+  const user = useSelector<iState, iState['user']>((state) => state.user);
+  const dispatch = useDispatch();
 
-  const handlerOnClickGetMe = async () => {
-    try {
-      const res = await requester.whoAmI();
-      console.log(res);
-    } catch (e) {}
-  };
   return (
     <>
       <h1 className={`${s.h1} bold`}>
         Hi there,
         {' '}
-        { user }
+        {user.login.valueShowed || 'Guest'}
         !
       </h1>
-
-      <button type="button" onClick={handlerOnClickGetMe}>check me!</button>
 
       <NextLink href="/login">
         <a>to login page</a>
       </NextLink>
     </>
   );
-}
+};
+export default Home;

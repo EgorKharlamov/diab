@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import NextLink from 'next/link';
+import { useDispatch } from 'react-redux';
 import s from '../styles/Home.module.sass';
-import requester from '../helpers/requester';
+import { UserActions } from '../store/user/actions';
+import { initialStateUser } from '../store/user/initialState';
+import { signIn } from '../types/user';
 
 export default function Login() {
   const [login, setLogin] = useState('');
   const [pass, setPass] = useState('');
   const [email, setEmail] = useState('');
+
+  const dispatch = useDispatch();
 
   const onChangeLoginHandler = (val: React.FormEvent<HTMLInputElement>) => {
     setLogin(val.currentTarget.value);
@@ -21,27 +26,15 @@ export default function Login() {
   };
 
   const onClickHandlerSignUp = async () => {
-    try {
-      const createUser = await requester.createUser({ login, email, pass });
-      console.log(createUser);
-    } catch (e) { return null; }
-    return null;
+    dispatch(UserActions.signUp({ login, email, pass }));
   };
 
   const onClickHandlerSignIn = async () => {
-    try {
-      const logIn = await requester.authUser({ entry: login, pass });
-      console.log(logIn);
-    } catch (e) { return null; }
-    return null;
+    dispatch(UserActions.signIn({ entry: login, pass }));
   };
 
   const onClickHandlerLogOut = async () => {
-    try {
-      const logOut = await requester.logOutUser();
-      console.log(logOut);
-    } catch (e) { return null; }
-    return null;
+    dispatch(UserActions.logOut());
   };
 
   return (
