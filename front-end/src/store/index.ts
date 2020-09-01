@@ -1,17 +1,27 @@
 import { createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { MakeStore, createWrapper } from 'next-redux-wrapper';
-import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import { rootReducer } from './rootReducer';
-import { initialStateUser, iUser } from './user/initialState';
+import { initialStateUser } from './user/initialState';
 import rootSaga from './rootSaga';
+import { iUser } from '../types/user';
 
 export interface iState {
   user: iUser
 }
 export const initialState = {
   user: { ...initialStateUser },
+};
+
+const bindMiddleware = (middleware:any) => {
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line global-require
+    const { composeWithDevTools } = require('redux-devtools-extension');
+    // eslint-disable-next-line global-require
+    const { logger } = require('redux-logger');
+    return composeWithDevTools(applyMiddleware(...middleware, logger));
+  }
+  return applyMiddleware(...middleware);
 };
 
 // create a makeStore function
@@ -22,9 +32,7 @@ const makeStore: MakeStore<iState> = () => {
   const store = createStore(
     rootReducer,
     initialState,
-    composeWithDevTools(applyMiddleware(
-      logger, sagaMiddleware,
-    )),
+    bindMiddleware([sagaMiddleware]),
   );
   sagaMiddleware.run(rootSaga);
   return store;
