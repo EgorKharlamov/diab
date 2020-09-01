@@ -9,6 +9,7 @@ import {
 import { MailToken } from '../../models/MailTokens';
 import { PassRecovery } from '../../models/PassRecovery';
 import { Mailer } from '../../services/mail';
+import { randInt } from '../../helpers/math';
 
 export default {
 
@@ -77,7 +78,9 @@ export default {
       const { refreshToken, accessToken } = createTokens(user);
       res.cookie('refresh-token', refreshToken, { expires: dateRefresh });
       res.cookie('access-token', accessToken, { expires: dateAccess });
-      return 'All right!';
+
+      user.user.pass = '*'.repeat(randInt(1, 40));
+      return user;
     },
 
     invalidateTokens: async (_: any, __: any, { req, res }: any) => {

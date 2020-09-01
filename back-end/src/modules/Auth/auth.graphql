@@ -1,6 +1,6 @@
 type Mutation {
     createUser(login: String!, pass: String!, email: String!): String!
-    authUser(entry: String!, pass: String!): String!
+    authUser(entry: String!, pass: String!): User!
     invalidateTokens: Boolean!
     createMailTokens: String!
     verifyByMail(token: String!): String!

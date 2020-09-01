@@ -37,12 +37,19 @@ const UserSchema: Schema = new Schema({
     },
     pass: { type: String, required: true },
     email: {
-      value: { type: String },
-      valueShowed: { type: String },
+      value: { type: String, required: true, unique: true },
+      valueShowed: { type: String, required: true, unique: true },
       verified: { type: Boolean, default: false },
     },
     phone: {
-      value: { type: String },
+      value: {
+        type: String,
+        index: {
+          unique: true,
+          partialFilterExpression: { value: { $type: 'string' } },
+        },
+        default: null,
+      },
       verified: { type: Boolean, default: false },
     },
     role: { type: Number, required: true, default: eUserRoles.user },
