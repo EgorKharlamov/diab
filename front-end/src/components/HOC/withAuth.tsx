@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { iState } from '../store';
-import { signIn } from '../types/user';
+import { iState } from '../../store';
+import { signIn } from '../../types/user';
 
 const withAuth = (C: React.FunctionComponent) => function AuthComponent(props:any) {
   const router = useRouter();

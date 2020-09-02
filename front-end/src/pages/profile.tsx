@@ -1,6 +1,6 @@
 import React from 'react';
 import NextLink from 'next/link';
-import withAuth from '../components/withAuth';
+import withAuth from '../components/HOC/withAuth';
 
 const Profile = () => (
 
