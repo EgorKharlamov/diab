@@ -1,0 +1,6 @@
+{
+  "helloUser": "Привет, {{name}}!",
+  "helloGuest": "Привет, Гость!",
+  "error-with-status": "На сервере ошибка с кодом {{statusCode}}",
+  "error-without-status": "На сервере что-то сломалось :("
+}
