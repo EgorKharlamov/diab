@@ -3,8 +3,6 @@ import NextLink from 'next/link';
 import { useDispatch } from 'react-redux';
 import s from '../styles/Home.module.sass';
 import { UserActions } from '../store/user/actions';
-import { initialStateUser } from '../store/user/initialState';
-import { signIn } from '../types/user';
 
 export default function Login() {
   const [login, setLogin] = useState('');
@@ -44,6 +42,8 @@ export default function Login() {
         Login page!
       </h1>
       <NextLink href="/"><a>Home</a></NextLink>
+      <br />
+      <NextLink href="/profile"><a>profile</a></NextLink>
 
       <form>
         <label htmlFor="login">

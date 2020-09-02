@@ -15,7 +15,7 @@ const setUser = createAction<iUser>(Type.SET_USER);
 const clearUser = createAction<iUser>(Type.CLEAR_USER, () => initialStateUser);
 const signUp = createAction<iSignUp>(Type.SIGN_UP);
 const signIn = createAction<iSignIn>(Type.SIGN_IN);
-const logOut = createAction<iUser>(Type.LOG_OUT);
+const logOut = createAction(Type.LOG_OUT);
 
 export const UserActions = {
   Type,

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import s from '../styles/Home.module.sass';
 import { iState } from '../store';
 
-export const Home = () => {
+const Home = () => {
   const user = useSelector<iState, iState['user']>((state) => state.user);
   const dispatch = useDispatch();
 
@@ -19,6 +19,10 @@ export const Home = () => {
 
       <NextLink href="/login">
         <a>to login page</a>
+      </NextLink>
+      <br />
+      <NextLink href="/profile">
+        <a>to profile</a>
       </NextLink>
     </>
   );
