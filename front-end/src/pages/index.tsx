@@ -1,6 +1,7 @@
 import React from 'react';
 import s from '../styles/UI/Home.module.sass';
 import Layout from '../components/Layout';
+import { withTranslation } from '../../i18n';
 
 const Home = () => (
   <Layout>
@@ -10,4 +11,9 @@ const Home = () => (
 
   </Layout>
 );
-export default Home;
+
+Home.getInitialProps = async () => ({
+  namespacesRequired: ['common', 'inputs', 'buttons', 'links'],
+});
+
+export default withTranslation(['common', 'inputs', 'buttons', 'links'])(Home);

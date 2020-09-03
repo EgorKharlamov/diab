@@ -23,10 +23,6 @@ const Layout = ({ children, t }:any) => {
   return (
     <>
       <Navbar navPoints={linksNav} />
-      <br />
-      <button type="button" onClick={() => i18n.changeLanguage('en')}>{t('buttons:changeLangEn')}</button>
-      <br />
-      <button type="button" onClick={() => i18n.changeLanguage('ru')}>{t('buttons:changeLangRu')}</button>
       <div>
         {children}
       </div>

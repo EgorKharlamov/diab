@@ -5,12 +5,16 @@ import { rootReducer } from './rootReducer';
 import { initialStateUser } from './user/initialState';
 import rootSaga from './rootSaga';
 import { iUser } from '../types/user';
+import { iApp } from '../types/app';
+import { initialStateApp } from './app/initialState';
 
 export interface iState {
-  user: iUser
+  user: iUser,
+  app: iApp
 }
 export const initialState = {
   user: { ...initialStateUser },
+  app: { ...initialStateApp },
 };
 
 const bindMiddleware = (middleware:any) => {
