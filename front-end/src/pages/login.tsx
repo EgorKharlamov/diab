@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import s from '../styles/Home.module.sass';
+import s from '../styles/UI/Home.module.sass';
 import { UserActions } from '../store/user/actions';
 import Layout from '../components/Layout';
 import Input from '../components/UI/Input';

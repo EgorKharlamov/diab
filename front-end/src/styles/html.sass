@@ -1,0 +1,11 @@
+@import "mixins"
+
+\:root[data-theme="default"]
+    // @include defineColorHSL(--color-primary-darker, 220, 90%, 36%)
+    @include defineColorHSL(--color-bg-light, 189, 44%, 15%)
+
+    @include defineColorHSL(--color-text-main, 0, 1%, 76%)
+
+\:root[data-theme="dark"]
+    @include defineColorHSL(--color-bg-light, 19, 44%, 15%)
+    @include defineColorHSL(--color-text-main, 89, 44%, 15%)

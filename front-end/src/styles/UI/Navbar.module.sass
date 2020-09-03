@@ -1,0 +1,27 @@
+@import "../functions"
+
+.navbar
+  background-color: alpha(var(--color-bg-light), 1)
+  max-height: 80px
+  align-content: center
+
+  &--grid
+    display: grid
+    grid-template-columns: repeat(2, 1fr)
+
+.logo-container
+  display: flex
+  align-items: center
+
+  & .h1
+    color: alpha(var(--color-text-main), 1)
+
+.nav
+  height: 100%
+  text-align: right
+
+.ul
+  list-style: none
+  display: flex
+  justify-content: flex-end
+
