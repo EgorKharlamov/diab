@@ -10,7 +10,7 @@ import { iUser, iResponse, eResponseType } from '../../types/user';
 function* createUserWorker(action: Action<iSignUp>) {
   try {
     const res = yield call(requester.createUser, { ...action.payload });
-    let data: iResponse;
+    let data: iResponse = { type: null, message: null };
     if (res && res.data) {
       data = {
         type: eResponseType.success,
@@ -32,7 +32,7 @@ function* createUserWorker(action: Action<iSignUp>) {
 function* authUserWorker(action: Action<iSignIn>) {
   try {
     const res = yield call(requester.authUser, { ...action.payload });
-    let data: iResponse;
+    let data: iResponse = { type: null, message: null };
     if (res && res.data && res.data.authUser) {
       yield put(UserActions.setUser({ ...res.data.authUser.user }));
     }
@@ -51,7 +51,7 @@ function* authUserWorker(action: Action<iSignIn>) {
 function* passRecoveryUserWorker(action: Action<iPassRecovery>) {
   try {
     const res = yield call(requester.passwordRecovery, { ...action.payload });
-    let data: iResponse;
+    let data: iResponse = { type: null, message: null };
     if (res && res.data) {
       data = {
         type: eResponseType.success,
@@ -64,11 +64,6 @@ function* passRecoveryUserWorker(action: Action<iPassRecovery>) {
         message: res.errors[0].message,
       };
     }
-    console.log(`
-    
-    hey!
-    
-    `);
     yield put(UserActions.passRecoveryMessage({ ...data }));
     yield delay(5000);
     yield put(UserActions.passRecoveryMessage(null));

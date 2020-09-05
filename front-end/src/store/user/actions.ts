@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { iSignIn, iSignUp, iPassRecovery } from '../../types/auth';
-import { iUser } from '../../types/user';
+import { iUser, iResponse } from '../../types/user';
 import { initialStateUser } from './initialState';
 
 enum Type {
@@ -21,9 +21,9 @@ const signUp = createAction<iSignUp>(Type.SIGN_UP);
 const signIn = createAction<iSignIn>(Type.SIGN_IN);
 const logOut = createAction(Type.LOG_OUT);
 const passRecovery = createAction<iPassRecovery>(Type.PASSWORD_RECOVERY);
-const signUpMessage = createAction<iUser>(Type.SIGN_UP_MESSAGE);
-const signInMessage = createAction<iUser>(Type.SIGN_IN_MESSAGE);
-const passRecoveryMessage = createAction<iUser>(Type.PASS_RECOVERY_MESSAGE);
+const signUpMessage = createAction<iResponse | null>(Type.SIGN_UP_MESSAGE);
+const signInMessage = createAction<iResponse | null>(Type.SIGN_IN_MESSAGE);
+const passRecoveryMessage = createAction<iResponse | null>(Type.PASS_RECOVERY_MESSAGE);
 
 export const UserActions = {
   Type,
