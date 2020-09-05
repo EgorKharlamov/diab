@@ -17,4 +17,7 @@ export const initialStateUser: iUser = {
 
   },
   isLoggedIn: signIn.empty,
+  signUpMessage: null,
+  signInMessage: null,
+  passRecoveryMessage: null,
 };

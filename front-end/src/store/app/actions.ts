@@ -2,7 +2,7 @@ import { createAction } from 'redux-actions';
 import { iApp } from '../../types/app';
 
 enum Type {
-  CHANGE_THEME='CHANGE_THEME'
+  CHANGE_THEME = 'CHANGE_THEME',
 }
 
 const changeTheme = createAction<iApp>(Type.CHANGE_THEME);

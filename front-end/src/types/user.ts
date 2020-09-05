@@ -10,6 +10,10 @@ export interface iUser {
   email: iEmail
   phone: iPhone
   isLoggedIn: signIn | null
+
+  signUpMessage: iResponse | null,
+  signInMessage: iResponse | null,
+  passRecoveryMessage: iResponse | null
 }
 
 export interface iLogin {
@@ -26,4 +30,13 @@ export interface iEmail {
 export interface iPhone {
   value: string | null
   verified: boolean | null
+}
+
+export enum eResponseType {
+  success = 'success',
+  error = 'error'
+}
+export interface iResponse {
+  type: eResponseType.error | eResponseType.success | null,
+  message: string | null
 }

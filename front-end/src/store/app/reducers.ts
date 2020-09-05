@@ -4,7 +4,7 @@ import { AppActions } from './actions';
 import { initialStateApp } from './initialState';
 import { iApp } from '../../types/app';
 
-export const app = (state:iApp | undefined = initialStateApp, action: AnyAction) => {
+export const app = (state: iApp | undefined = initialStateApp, action: AnyAction) => {
   switch (action.type) {
     case HYDRATE:
       return { ...state, ...action.payload.app };

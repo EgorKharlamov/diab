@@ -1,4 +1,6 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, {
+  ChangeEvent, useState, useEffect,
+} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,9 +14,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Alert from '@material-ui/lab/Alert';
 import { loginMode } from '../types/auth';
 import { UserActions } from '../store/user/actions';
+import { iState } from '../store/index';
 
 function Copyright() {
   return (
@@ -53,12 +57,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn({ changeMode }:any) {
+export default function SignIn({ changeMode }: any) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const { signInMessage } = useSelector<iState, iState['user']>((state) => state.user);
+  useEffect(() => { }, [signInMessage]);
 
   const [entry, setEntry] = useState('');
   const [pass, setPass] = useState('');
-  const dispatch = useDispatch();
 
   const handleOnChangeEntry = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setEntry(e.currentTarget.value);
@@ -82,6 +89,10 @@ export default function SignIn({ changeMode }:any) {
           Sign in
         </Typography>
         <form className={classes.form} noValidate>
+          <Grid item xs={12}>
+            {signInMessage && signInMessage.type
+              && <Alert severity={signInMessage.type}>{signInMessage.message}</Alert>}
+          </Grid>
           <TextField
             variant="outlined"
             margin="normal"
@@ -121,7 +132,7 @@ export default function SignIn({ changeMode }:any) {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link className={classes.linkWithoutHref} variant="body2">
+              <Link className={classes.linkWithoutHref} variant="body2" onClick={() => changeMode(loginMode.passRecovery)}>
                 Forgot password?
               </Link>
             </Grid>

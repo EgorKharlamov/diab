@@ -10,7 +10,7 @@ import { iState } from '../../store';
 import { signIn } from '../../types/user';
 import { Router } from '../../../i18n';
 
-const HeaderRightSectionDesktop = ({ handleProfileMenuOpen, menuId }:any) => {
+const HeaderRightSectionDesktop = ({ handleProfileMenuOpen, menuId }: any) => {
   const { isLoggedIn } = useSelector<iState, iState['user']>((state) => state.user);
   const redirectUnauthorized = () => {
     if (isLoggedIn !== signIn.succeed) {

@@ -7,7 +7,7 @@ import { setTheme } from '../../helpers/theme';
 function* changeThemeWorker(action: Action<iApp>) {
   try {
     yield call(setTheme, action.payload.theme);
-  } catch (e) {}
+  } catch (e) { }
 }
 
 export default function* watchApp() {
