@@ -76,8 +76,8 @@ export default {
       }
 
       const { refreshToken, accessToken } = createTokens(user);
-      res.cookie('refresh-token', refreshToken, { expires: dateRefresh });
-      res.cookie('access-token', accessToken, { expires: dateAccess });
+      res.cookie('refresh-token', refreshToken, { expires: dateRefresh() });
+      res.cookie('access-token', accessToken, { expires: dateAccess() });
 
       user.user.pass = '*'.repeat(randInt(1, 40));
       return user;
@@ -107,18 +107,24 @@ export default {
       if (!user || user.user.email.verified) {
         throw new Error('No no no!');
       }
-      const token = new MailToken({ userId: user.id, token: crypto.randomBytes(16).toString('hex') });
+      const date = () => new Date().toISOString();
+      const token = new MailToken({
+        userId: user.id,
+        token: crypto.randomBytes(16).toString('hex'),
+        createdAt: date(),
+        updatedAt: date(),
+      });
       const targetMail = user.user.email.value;
 
       const existToken = await MailToken.findOne({ userId: req.userId });
-      if (existToken && isMailTokenAlive(existToken.createdAt)) {
+      if (existToken && isMailTokenAlive(existToken.updatedAt)) {
         throw new Error('Your previous token is alive! Check your email again!');
       }
 
       if (existToken) {
         await MailToken.findByIdAndUpdate(
           existToken.id,
-          { token: token.token, createdAt: new Date().toISOString() },
+          { token: token.token, updatedAt: date() },
         );
       } else {
         await token.save();
@@ -136,7 +142,7 @@ export default {
         throw new Error('No no no!');
       }
       const existToken = await MailToken.findOne({ userId: req.userId });
-      if (existToken && isMailTokenAlive(existToken.createdAt)) {
+      if (existToken && isMailTokenAlive(existToken.updatedAt)) {
         await User.findByIdAndUpdate(
           { _id: req.userId },
           { 'user.email.verified': true },
@@ -155,16 +161,23 @@ export default {
 
       const isTempPassExistForUser = await PassRecovery.findOne({ email: email.toLowerCase() });
       const pass = crypto.randomBytes(4).toString('hex');
+      const date = () => new Date().toISOString();
       if (isTempPassExistForUser && isPassRecoveryAlive(isTempPassExistForUser.updatedAt)) {
         throw new Error('Recovery pass alive yet! Please check email again!');
       }
       if (isTempPassExistForUser && !isPassRecoveryAlive(isTempPassExistForUser.updatedAt)) {
         await PassRecovery.findByIdAndUpdate(isTempPassExistForUser.id, {
           passRecovery: pass,
-          updatedAt: new Date().toISOString(),
+          updatedAt: date(),
         });
       } else if (!isTempPassExistForUser) {
-        const tempPass = new PassRecovery({ email: email.toLowerCase(), passRecovery: pass, userId: user.id });
+        const tempPass = new PassRecovery({
+          email: email.toLowerCase(),
+          passRecovery: pass,
+          userId: user.id,
+          createdAt: date(),
+          updatedAt: date(),
+        });
         await tempPass.save();
       }
 

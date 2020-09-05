@@ -65,8 +65,8 @@ const startServer = async () => {
 
     const tokens = createTokens(user);
 
-    res.cookie('refresh-token', tokens.refreshToken, { expires: dateRefresh, domain: '' });
-    res.cookie('access-token', tokens.accessToken, { expires: dateAccess, domain: '' });
+    res.cookie('refresh-token', tokens.refreshToken, { expires: dateRefresh(), domain: '' });
+    res.cookie('access-token', tokens.accessToken, { expires: dateAccess(), domain: '' });
     req.userId = user.id;
 
     next();
