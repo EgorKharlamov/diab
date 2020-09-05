@@ -1,11 +1,10 @@
 import React from 'react';
-import s from '../styles/UI/Home.module.sass';
 import Layout from '../components/Layout';
 import { withTranslation } from '../../i18n';
 
 const Home = () => (
   <Layout>
-    <h1 className={`${s.h1} bold`}>
+    <h1>
       Home page
     </h1>
 

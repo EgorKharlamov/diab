@@ -1,53 +1,45 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import s from '../styles/UI/Home.module.sass';
-import { UserActions } from '../store/user/actions';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import FormSignIn from '../components/FormSignIn';
+import FormSignUp from '../components/FormSignUp';
 import Layout from '../components/Layout';
-import Input from '../components/UI/Input';
-import { withTranslation } from '../../i18n';
+import { iLoginMode, loginMode } from '../types/auth';
+import { withTranslation, Router } from '../../i18n';
+import { iState } from '../store';
+import { signIn } from '../types/user';
 
-const Login = ({ t }:any) => {
-  const [login, setLogin] = useState('');
-  const [pass, setPass] = useState('');
-  const [email, setEmail] = useState('');
+const Login = () => {
+  const { isLoggedIn } = useSelector<iState, iState['user']>((state) => state.user);
+  const [mode, setMode] = useState<string | iLoginMode>(loginMode.signIn);
 
-  const dispatch = useDispatch();
-
-  const onClickHandlerSignUp = async () => {
-    dispatch(UserActions.signUp({ login, email, pass }));
+  const changeMode = (modeVal:iLoginMode) => {
+    setMode(modeVal);
   };
+  useEffect(() => {
+    if (isLoggedIn === signIn.succeed) {
+      Router.push('/');
+    }
+  }, [isLoggedIn]);
 
-  const onClickHandlerSignIn = async () => {
-    dispatch(UserActions.signIn({ entry: login, pass }));
+  const renderForm = () => {
+    if (mode === loginMode.signIn) {
+      return <FormSignIn changeMode={changeMode} />;
+    }
+    if (mode === loginMode.signUp) {
+      return <FormSignUp changeMode={changeMode} />;
+    }
   };
-
-  const onClickHandlerLogOut = async () => {
-    dispatch(UserActions.logOut());
-  };
-
   return (
-    <Layout>
-
-      <h1 className={`${s.h1} bold`}>
-        Login page!
-      </h1>
-
-      <form>
-        <Input value={login} label={t('enterLogin')} name="login" onChangeInput={setLogin} />
-        <Input value={pass} label={t('enterPass')} name="pass" onChangeInput={setPass} type="password" />
-        <Input value={email} label={t('enterEmail')} name="email" onChangeInput={setEmail} type="email" />
-
-        <button type="button" onClick={onClickHandlerSignIn}>{t('buttons:signIn')}</button>
-        <button type="button" onClick={onClickHandlerSignUp}>{t('buttons:signUp')}</button>
-        <button type="button" onClick={onClickHandlerLogOut}>{t('buttons:logOut')}</button>
-      </form>
-
-    </Layout>
-
+    <>
+      <Layout>
+        {renderForm()}
+      </Layout>
+    </>
   );
 };
+
 Login.getInitialProps = async () => ({
-  namespacesRequired: ['inputs', 'buttons'],
+  namespacesRequired: ['common'],
 });
 
-export default withTranslation(['inputs', 'buttons'])(Login);
+export default withTranslation(['common'])(Login);

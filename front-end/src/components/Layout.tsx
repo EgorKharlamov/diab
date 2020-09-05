@@ -1,36 +1,18 @@
 import React from 'react';
-import Navbar from './Navbar';
-import { i18n, withTranslation } from '../../i18n';
+import { withTranslation } from '../../i18n';
+import Header from './Header/Header';
 
-const Layout = ({ children, t }:any) => {
-  const linksNav = [
-    {
-      id: 0,
-      link: '/',
-      name: t('links:home'),
-    },
-    {
-      id: 1,
-      link: '/profile',
-      name: t('links:profile'),
-    },
-    {
-      id: 2,
-      link: '/login',
-      name: t('links:login'),
-    },
-  ];
+const Layout = ({ children, t }: any) => {
+  const kek = 'kek';
   return (
     <>
-      <Navbar navPoints={linksNav} />
-      <div>
-        {children}
-      </div>
+      <Header />
+      {children}
     </>
   );
 };
 Layout.getInitialProps = async () => ({
-  namespacesRequired: ['common', 'links', 'buttons'],
+  namespacesRequired: ['inputs', 'buttons'],
 });
 
-export default withTranslation(['common', 'links', 'buttons'])(Layout);
+export default withTranslation(['inputs', 'buttons'])(Layout);

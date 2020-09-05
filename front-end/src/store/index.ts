@@ -43,4 +43,4 @@ const makeStore: MakeStore<iState> = () => {
 };
 
 // export an assembled wrapper
-export const wrapper = createWrapper<iState>(makeStore, { debug: true });
+export const wrapper = createWrapper<iState>(makeStore, { debug: process.env.NODE_ENV !== 'production' });

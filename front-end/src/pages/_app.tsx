@@ -8,6 +8,7 @@ import { signIn } from '../types/user';
 import { UserActions } from '../store/user/actions';
 import redirect from '../helpers/redirect';
 import { appWithTranslation } from '../../i18n';
+import 'fontsource-roboto';
 
 const WrappedApp: FC<AppProps> = ({ Component, pageProps }) => (
   <Component {...pageProps} />
@@ -27,6 +28,7 @@ WrappedApp.getInitialProps = async (appContext: AppContext) => {
       appContext.ctx.store.dispatch(UserActions.setUser(
         { ...user.data.me.user, isLoggedIn: signIn.succeed },
       ));
+      redirect(appContext.ctx.res, '/', { login: 'login' }, appContext.ctx.pathname);
     } else {
       appContext.ctx.store.dispatch(UserActions.clearUser());
       // redirect unauth users to login page
