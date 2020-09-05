@@ -59,7 +59,7 @@ export default function SignUp({ changeMode }: any) {
   const [email, setEmail] = useState('');
   const dispatch = useDispatch();
   const { passRecoveryMessage } = useSelector<iState, iState['user']>((state) => state.user);
-  useEffect(() => { console.log(passRecoveryMessage); }, [passRecoveryMessage]);
+  useEffect(() => { }, [passRecoveryMessage]);
 
   const handleOnChangeEmail = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setEmail(e.currentTarget.value);

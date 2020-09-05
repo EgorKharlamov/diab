@@ -149,7 +149,7 @@ export default function Header() {
             <HeaderRightSectionDesktop handleProfileMenuOpen={handleProfileMenuOpen} menuId={menuId} />
           </div>
           <div className={classes.sectionMobile}>
-            <HeaderRightSectionMobile handleProfileMenuOpen={handleMobileMenuOpen} menuId={mobileMenuId} />
+            <HeaderRightSectionMobile handleMobileMenuOpen={handleMobileMenuOpen} menuId={mobileMenuId} />
           </div>
         </Toolbar>
       </AppBar>
