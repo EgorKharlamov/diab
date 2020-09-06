@@ -19,23 +19,37 @@ const WrappedApp: FC<AppProps> = ({ Component, pageProps }) => (
 WrappedApp.getInitialProps = async (appContext: AppContext) => {
   const protectedRoutes = {
     profile: 'profile',
+    dairy: 'dairy',
   };
   // try to set user when app init
   const state = appContext.ctx.store.getState();
   if (state.user.isLoggedIn === signIn.empty) {
     const user = await requester.whoAmI(appContext.ctx);
     if (user.data && user.data.me && user.data.me.user) {
-      appContext.ctx.store.dispatch(UserActions.setUser(
-        { ...user.data.me.user, isLoggedIn: signIn.succeed },
-      ));
-      redirect(appContext.ctx.res, '/', { login: 'login' }, appContext.ctx.pathname);
+      appContext.ctx.store.dispatch(
+        UserActions.setUser({
+          ...user.data.me.user,
+          isLoggedIn: signIn.succeed,
+        }),
+      );
+      redirect(
+        appContext.ctx.res,
+        '/',
+        { login: 'login' },
+        appContext.ctx.pathname,
+      );
     } else {
       appContext.ctx.store.dispatch(UserActions.clearUser());
       // redirect unauth users to login page
-      redirect(appContext.ctx.res, '/login', protectedRoutes, appContext.ctx.pathname);
+      redirect(
+        appContext.ctx.res,
+        '/login',
+        protectedRoutes,
+        appContext.ctx.pathname,
+      );
     }
   }
 
-  return { ...await App.getInitialProps(appContext) };
+  return { ...(await App.getInitialProps(appContext)) };
 };
 export default wrapper.withRedux(appWithTranslation(WrappedApp));

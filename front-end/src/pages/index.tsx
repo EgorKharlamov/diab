@@ -4,10 +4,7 @@ import { withTranslation } from '../../i18n';
 
 const Home = () => (
   <Layout>
-    <h1>
-      Home page
-    </h1>
-
+    <h1>Home page</h1>
   </Layout>
 );
 

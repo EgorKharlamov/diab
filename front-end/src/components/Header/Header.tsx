@@ -25,7 +25,10 @@ const useStyles = headerStyles;
 export default function Header() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [
+    mobileMoreAnchorEl,
+    setMobileMoreAnchorEl,
+  ] = React.useState<null | HTMLElement>(null);
   const dispatch = useDispatch();
 
   const isMenuOpen = Boolean(anchorEl);
@@ -128,9 +131,29 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography onClick={() => Router.push('/')} className={classes.title} variant="h6" noWrap style={{ cursor: 'pointer' }}>
-            Material-UI
+
+          <Typography
+            className={classes.title}
+            variant="h6"
+            noWrap
+            style={{ cursor: 'pointer', marginRight: '15px' }}
+          >
+            <Link href="/">
+              <a>Home</a>
+            </Link>
           </Typography>
+
+          <Typography
+            className={classes.title}
+            variant="h6"
+            noWrap
+            style={{ cursor: 'pointer' }}
+          >
+            <Link href="/dairy">
+              <a>Dairy</a>
+            </Link>
+          </Typography>
+
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -146,10 +169,16 @@ export default function Header() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <HeaderRightSectionDesktop handleProfileMenuOpen={handleProfileMenuOpen} menuId={menuId} />
+            <HeaderRightSectionDesktop
+              handleProfileMenuOpen={handleProfileMenuOpen}
+              menuId={menuId}
+            />
           </div>
           <div className={classes.sectionMobile}>
-            <HeaderRightSectionMobile handleMobileMenuOpen={handleMobileMenuOpen} menuId={mobileMenuId} />
+            <HeaderRightSectionMobile
+              handleMobileMenuOpen={handleMobileMenuOpen}
+              menuId={mobileMenuId}
+            />
           </div>
         </Toolbar>
       </AppBar>

@@ -7,8 +7,13 @@ import { signIn } from '../../types/user';
 import { Router } from '../../../i18n';
 import { iState } from '../../store';
 
-const HeaderRightSectionMobile = ({ mobileMenuId, handleMobileMenuOpen }:any) => {
-  const { isLoggedIn } = useSelector<iState, iState['user']>((state) => state.user);
+const HeaderRightSectionMobile = ({
+  mobileMenuId,
+  handleMobileMenuOpen,
+}: any) => {
+  const { isLoggedIn } = useSelector<iState, iState['user']>(
+    (state) => state.user,
+  );
   const redirectUnauthorized = () => {
     if (isLoggedIn !== signIn.succeed) {
       Router.push('/login');
@@ -31,7 +36,17 @@ const HeaderRightSectionMobile = ({ mobileMenuId, handleMobileMenuOpen }:any) =>
         </>
       );
     }
-    return <Button variant="contained" color="secondary" type="button" onClick={redirectUnauthorized}>Log in</Button>;
+    return (
+      <Button
+        variant="contained"
+        style={{ whiteSpace: 'nowrap' }}
+        color="secondary"
+        type="button"
+        onClick={redirectUnauthorized}
+      >
+        Log in
+      </Button>
+    );
   };
 
   return render();

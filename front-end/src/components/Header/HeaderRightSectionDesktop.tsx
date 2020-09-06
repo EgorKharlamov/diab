@@ -11,7 +11,9 @@ import { signIn } from '../../types/user';
 import { Router } from '../../../i18n';
 
 const HeaderRightSectionDesktop = ({ handleProfileMenuOpen, menuId }: any) => {
-  const { isLoggedIn } = useSelector<iState, iState['user']>((state) => state.user);
+  const { isLoggedIn } = useSelector<iState, iState['user']>(
+    (state) => state.user,
+  );
   const redirectUnauthorized = () => {
     if (isLoggedIn !== signIn.succeed) {
       Router.push('/login');
@@ -46,7 +48,17 @@ const HeaderRightSectionDesktop = ({ handleProfileMenuOpen, menuId }: any) => {
         </>
       );
     }
-    return <Button variant="contained" color="secondary" type="button" onClick={redirectUnauthorized}>Log in</Button>;
+    return (
+      <Button
+        variant="contained"
+        color="secondary"
+        style={{ whiteSpace: 'nowrap' }}
+        type="button"
+        onClick={redirectUnauthorized}
+      >
+        Log in
+      </Button>
+    );
   };
   return render();
 };

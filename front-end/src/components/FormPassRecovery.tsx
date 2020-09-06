@@ -58,10 +58,14 @@ export default function SignUp({ changeMode }: any) {
 
   const [email, setEmail] = useState('');
   const dispatch = useDispatch();
-  const { passRecoveryMessage } = useSelector<iState, iState['user']>((state) => state.user);
-  useEffect(() => { }, [passRecoveryMessage]);
+  const { passRecoveryMessage } = useSelector<iState, iState['user']>(
+    (state) => state.user,
+  );
+  useEffect(() => {}, [passRecoveryMessage]);
 
-  const handleOnChangeEmail = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleOnChangeEmail = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setEmail(e.currentTarget.value);
   };
 
@@ -82,8 +86,11 @@ export default function SignUp({ changeMode }: any) {
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              {passRecoveryMessage && passRecoveryMessage.type
-                && <Alert severity={passRecoveryMessage.type}>{passRecoveryMessage.message}</Alert>}
+              {passRecoveryMessage && passRecoveryMessage.type && (
+                <Alert severity={passRecoveryMessage.type}>
+                  {passRecoveryMessage.message}
+                </Alert>
+              )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -97,7 +104,6 @@ export default function SignUp({ changeMode }: any) {
                 onChange={handleOnChangeEmail}
               />
             </Grid>
-
           </Grid>
           <Button
             type="button"
@@ -111,7 +117,11 @@ export default function SignUp({ changeMode }: any) {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link className={classes.linkWithoutHref} variant="body2" onClick={() => changeMode(loginMode.signIn)}>
+              <Link
+                className={classes.linkWithoutHref}
+                variant="body2"
+                onClick={() => changeMode(loginMode.signIn)}
+              >
                 Back to log in
               </Link>
             </Grid>

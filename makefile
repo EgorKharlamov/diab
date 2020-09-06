@@ -14,7 +14,7 @@ front-build:
 	cd front-end && npm run build 
 
 front-prod:
-	 cd front-end && npm run start
+	cd front-end && npm run start
 
 spfd:
 	terminator -e "make server-prod" && terminator -e "make front-dev"
